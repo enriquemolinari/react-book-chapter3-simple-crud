@@ -7,15 +7,14 @@ import Header from "./dashboard/components/Header";
 import SideMenu from "./dashboard/components/SideMenu";
 import AppTheme from "./dashboard/shared-theme/AppTheme";
 
-export default function Layout({ left, children }) {
+export default function Layout(props) {
   return (
     <AppTheme>
       <CssBaseline enableColorScheme />
       <Box sx={{ display: "flex" }}>
-        {/* Menu */}
         <SideMenu>
           <Stack sx={{ flexGrow: 1, p: 1, justifyContent: "space-between" }}>
-            {left}
+            {props.left}
           </Stack>
         </SideMenu>
         <AppNavbar />
@@ -40,7 +39,7 @@ export default function Layout({ left, children }) {
             }}
           >
             <Header />
-            {children}
+            <main>{props.children}</main>
           </Stack>
         </Box>
       </Box>
