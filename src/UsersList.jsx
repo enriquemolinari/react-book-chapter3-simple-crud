@@ -7,17 +7,19 @@ import UserDetails from "./UserDetails";
 
 export default function UsersList(props) {
   const [users, setUsers] = useState({ result: { data: [] } });
-  const [page, setPage] = useState(0);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5,
+  });
   const [showDetail, setShowDetail] = useState(false);
   const [userId, setUserId] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
   const [loading, setLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
   const [alertMsg, setAlertMsg] = useState("");
 
   useEffect(() => {
     fetchUsers();
-  }, [page, pageSize]);
+  }, [paginationModel]);
 
   const StyledBox = styled(Box)({
     height: 40,
@@ -33,13 +35,13 @@ export default function UsersList(props) {
         "?_page=" +
         //first page is 1 for the json server API
         //Material DataGrid first page is 0
-        (page + 1) +
+        (paginationModel.page + 1) +
         "&_limit=" +
-        pageSize
+        paginationModel.pageSize
     );
     let json = await response.json();
     response = {
-      total: response.headers.get("x-total-Count"),
+      total: response.headers.get("X-Total-Count"),
       data: json,
     };
     setUsers({ result: { total: response.total, data: response.data } });
@@ -104,8 +106,6 @@ export default function UsersList(props) {
   }
 
   async function handleEditing(params) {
-    console.log("asdf: " + params.field);
-    console.log("asdf: " + [params.field]);
     await fetch(props.apiUrl + "/" + params.id, {
       method: "PUT",
       body: JSON.stringify({
@@ -126,19 +126,17 @@ export default function UsersList(props) {
         <DataGrid
           rows={users.result.data}
           columns={columns}
-          pageSize={pageSize}
           paginationMode="server"
-          page={page}
-          onPageChange={(params) => {
-            setPage(params.page);
+          paginationModel={paginationModel}
+          onPaginationModelChange={(model, details) => {
+            setPaginationModel(model);
           }}
-          onPageSizeChange={(params) => {
-            setPageSize(params.pageSize);
-          }}
-          rowsPerPageOptions={[3, 5]}
+          pageSizeOptions={[3, 5]}
           rowCount={parseInt(users.result.total)}
           //to delete the selected row
-          onRowSelected={(e) => (userIdSelected = e.data.id)}
+          onRowSelectionModelChange={(rowSelectionModel) => {
+            userIdSelected = rowSelectionModel.ids.values().next().value;
+          }}
           //editing
           onEditCellChangeCommitted={(params) => handleEditing(params)}
           disableColumnMenu={true}
