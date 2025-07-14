@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Layout from "./Layout";
 import LeftMenu from "./LeftMenu";
-import UserForm from "./UserForm";
+import UsersForm from "./UsersForm";
 import UsersList from "./UsersList";
 import Welcome from "./Welcome";
 
@@ -31,7 +31,7 @@ export default function App() {
     >
       {itemClicked === MENU_ITEMS.WELCOME && <Welcome />}
       {itemClicked === MENU_ITEMS.USERSLIST && <UsersList apiUrl={apiUrl} />}
-      {itemClicked === MENU_ITEMS.USERFORM && <UserForm apiUrl={apiUrl} />}
+      {itemClicked === MENU_ITEMS.USERFORM && <UsersForm apiUrl={apiUrl} />}
     </Layout>
   );
 }
