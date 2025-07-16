@@ -29,7 +29,6 @@ export default function UsersList(props) {
   });
 
   async function fetchUsers() {
-    console.log(props.apiUrl);
     let response = await fetch(
       props.apiUrl +
         "?_page=" +
@@ -105,19 +104,17 @@ export default function UsersList(props) {
     setShowAlert(false);
   }
 
-  async function handleEditing(params) {
-    await fetch(props.apiUrl + "/" + params.id, {
+  async function handleEditing(newValues) {
+    await fetch(props.apiUrl + "/" + newValues.id, {
       method: "PUT",
-      body: JSON.stringify({
-        id: params.id,
-        [params.field]: params.props.value,
-      }),
+      body: JSON.stringify(newValues),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
     setAlertMsg("User Updated Successfully");
     setShowAlert(true);
+    return newValues;
   }
 
   return (
@@ -138,7 +135,7 @@ export default function UsersList(props) {
             userIdSelected = rowSelectionModel.ids.values().next().value;
           }}
           //editing
-          onEditCellChangeCommitted={(params) => handleEditing(params)}
+          processRowUpdate={(newRow) => handleEditing(newRow)}
           disableColumnMenu={true}
         />
       </div>
