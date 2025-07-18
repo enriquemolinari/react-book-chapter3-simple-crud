@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Box, CircularProgress, Snackbar } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { styled } from "@mui/material/styles";
 import Alert from "@mui/material/Alert";
 import UserDetails from "./UserDetails";
 
@@ -20,13 +19,6 @@ export default function UsersList(props) {
   useEffect(() => {
     fetchUsers();
   }, [paginationModel]);
-
-  const StyledBox = styled(Box)({
-    height: 40,
-    display: "flex",
-    justifyContent: "flex-end",
-    marginTop: 10,
-  });
 
   async function fetchUsers() {
     let response = await fetch(
@@ -140,12 +132,19 @@ export default function UsersList(props) {
         />
       </div>
       <div>
-        <StyledBox component="div">
+        <div
+          style={{
+            height: 40,
+            display: "flex",
+            justifyContent: "flex-end",
+            marginTop: 10,
+          }}
+        >
           <Button variant="contained" color="primary" onClick={handleDelete}>
             {loading && <CircularProgress color="inherit" size={24} />}
             {!loading && "Delete Selected User"}
           </Button>
-        </StyledBox>
+        </div>
       </div>
       <UserDetails
         apiUrl={props.apiUrl}
